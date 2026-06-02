@@ -136,6 +136,34 @@
     transition: opacity 1s ease-in;
 }
 
+.quest-count {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 28px;
+    -unity-font-style: bold;
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    -unity-font: url('project://database/Assets/HappyHarvest/Fonts/CurseCasual/Curse%20Casual.ttf');
+}
+
+.quest-complete {
+    color: rgb(255, 255, 255);
+    font-size: 28px;
+    -unity-font-style: bold;
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    -unity-font: url('project://database/Assets/HappyHarvest/Fonts/CurseCasual/Curse%20Casual.ttf');
+}
+
+#QuestHeader {
+    cursor: url('project://database/Assets/HappyHarvest/Art/UI/Texture_CursorHand.png');
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+#QuestHeader:hover {
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
 #Previous {
     background-image: url('project://database/Assets/HappyHarvest/Art/UI/Sprite_keyboard_key.png#Sprite_keyboard_key');
     opacity: 1;
