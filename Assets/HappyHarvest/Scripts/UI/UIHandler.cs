@@ -143,6 +143,10 @@ namespace HappyHarvest
             m_CornCount     = m_Document.rootVisualElement.Q<Label>("CornCount");
             m_WheatCount    = m_Document.rootVisualElement.Q<Label>("WheatCount");
             questHeader?.AddManipulator(new Clickable(ToggleQuestDropdown));
+
+            // dropdown is open by default — sync C# state and arrow to match
+            m_QuestOpen = true;
+            if (m_QuestArrow != null) m_QuestArrow.text = "\u25BC";
         }
         
         

@@ -84,20 +84,26 @@
     <ui:VisualElement name="QuestContainer" style="position: absolute; left: 37px; top: 110px; width: 250px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <ui:VisualElement name="QuestHeader" style="height: 95px; background-color: rgba(0, 0, 0, 0.5); border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; flex-direction: row; align-items: center; padding-left: 15px; padding-right: 15px; text-shadow: 0 24px 0 rgb(0, 0, 0);">
             <ui:Label name="QuestArrow" text="&#9658;" style="color: rgb(255, 255, 255); font-size: 20px; margin-right: 10px; -unity-font-style: bold; -unity-font: url(&quot;project://database/Assets/HappyHarvest/Fonts/CurseCasual/Curse%20Casual.ttf?fileID=12800000&amp;guid=31797353ab4fc7043a0f62eacf5ea3a9&amp;type=3#Curse Casual&quot;);" />
-            <ui:Label text="Buyout Mission" style="color: rgb(255, 255, 255); font-size: 22px; -unity-font-style: bold; flex-grow: 1; -unity-font: url(&quot;project://database/Assets/HappyHarvest/Fonts/CurseCasual/Curse%20Casual.ttf?fileID=12800000&amp;guid=31797353ab4fc7043a0f62eacf5ea3a9&amp;type=3#Curse Casual&quot;);" />
+            <ui:Label text="Sold To Store" style="color: rgb(255, 255, 255); font-size: 22px; -unity-font-style: bold; flex-grow: 1; -unity-font: url(&quot;project://database/Assets/HappyHarvest/Fonts/CurseCasual/Curse%20Casual.ttf?fileID=12800000&amp;guid=31797353ab4fc7043a0f62eacf5ea3a9&amp;type=3#Curse Casual&quot;);" />
         </ui:VisualElement>
-        <ui:VisualElement name="QuestDropdown" style="display: none; background-color: rgba(0, 0, 0, 0.5); border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-top: 5px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px;">
-            <ui:VisualElement style="flex-direction: row; align-items: center; height: 65px; margin-bottom: 4px;">
-                <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Carrot/Sprites/Sprite_Carrot_icon.png?fileID=21300000&amp;guid=f2c50504d7db1cd4d8df1e3bb31d78e2&amp;type=3#Sprite_Carrot_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
-                <ui:Label name="CarrotCount" text="0/50" class="quest-count" />
+        <ui:VisualElement name="QuestDropdown" style="display: flex; background-color: rgba(0, 0, 0, 0.5); border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-top: 5px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px;">
+            <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center; height: 65px; margin-bottom: 4px;">
+                <ui:VisualElement style="flex-direction: row; align-items: center; width: 175px;">
+                    <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Carrot/Sprites/Sprite_Carrot_icon.png?fileID=21300000&amp;guid=f2c50504d7db1cd4d8df1e3bb31d78e2&amp;type=3#Sprite_Carrot_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
+                    <ui:Label name="CarrotCount" text="0/50" class="quest-count" />
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement style="flex-direction: row; align-items: center; height: 65px; margin-bottom: 4px;">
-                <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Corn/Sprites/Sprite_Corn_icon.png?fileID=21300000&amp;guid=df8c24fccc5958a4399921627716fff1&amp;type=3#Sprite_Corn_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
-                <ui:Label name="CornCount" text="0/50" class="quest-count" />
+            <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center; height: 65px; margin-bottom: 4px;">
+                <ui:VisualElement style="flex-direction: row; align-items: center; width: 175px;">
+                    <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Corn/Sprites/Sprite_Corn_icon.png?fileID=21300000&amp;guid=df8c24fccc5958a4399921627716fff1&amp;type=3#Sprite_Corn_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
+                    <ui:Label name="CornCount" text="0/50" class="quest-count" />
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement style="flex-direction: row; align-items: center; height: 65px;">
-                <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Wheat/Sprites/Sprite_Wheat_icon.png?fileID=21300000&amp;guid=c491ea482c05c5747a804797b1556048&amp;type=3#Sprite_Wheat_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
-                <ui:Label name="WheatCount" text="0/50" class="quest-count" />
+            <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center; height: 65px;">
+                <ui:VisualElement style="flex-direction: row; align-items: center; width: 175px;">
+                    <ui:VisualElement style="width: 55px; height: 55px; background-image: url(&quot;project://database/Assets/HappyHarvest/Art/Crops/Wheat/Sprites/Sprite_Wheat_icon.png?fileID=21300000&amp;guid=c491ea482c05c5747a804797b1556048&amp;type=3#Sprite_Wheat_icon&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
+                    <ui:Label name="WheatCount" text="0/50" class="quest-count" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
