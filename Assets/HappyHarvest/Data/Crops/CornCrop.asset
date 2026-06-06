@@ -26,3 +26,5 @@ MonoBehaviour:
   ProductPerHarvest: 2
   DryDeathTimer: 3000
   HarvestEffect: {fileID: 6868274327975543791, guid: 0a550373057fc4b4a82ceb27907686ae, type: 3}
+  RottenTile: {fileID: 11400000, guid: b1c2d3e4f5a6b7c8d9e0f1a2b3c4d505, type: 2}
+  RotTime: 30

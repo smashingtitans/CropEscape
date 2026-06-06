@@ -25,6 +25,10 @@ namespace HappyHarvest
         public float DryDeathTimer = 30.0f;
         public VisualEffect HarvestEffect;
 
+        public TileBase RottenTile;
+        public float RotTime = 60.0f;
+        public float RottenDestroyTime = 10.0f;
+
         public int GetGrowthStage(float growRatio)
         {
             return Mathf.FloorToInt(growRatio * (GrowthStagesTiles.Length-1));

@@ -32,6 +32,8 @@ namespace HappyHarvest
                 public float GrowthTimer;
                 public int HarvestCount;
                 public float DyingTimer;
+                public float RotTimer;
+                public bool IsRotten;
             }
             
             public Crop GrowingCrop = null;
@@ -41,8 +43,11 @@ namespace HappyHarvest
             public float GrowthTimer = 0.0f;
 
             public int HarvestCount = 0;
-            
+
             public float DyingTimer;
+            public float RotTimer = 0.0f;
+            public bool IsRotten = false;
+            public float RottenDestroyTimer = 0.0f;
             public bool HarvestDone => HarvestCount == GrowingCrop.NumberOfHarvest;
 
             public void Init()
@@ -54,6 +59,8 @@ namespace HappyHarvest
                 HarvestCount = 0;
 
                 DyingTimer = 0.0f;
+                RotTimer = 0.0f;
+                IsRotten = false;
             }
 
             public Crop Harvest()
@@ -77,6 +84,8 @@ namespace HappyHarvest
                 data.GrowthRatio = GrowthRatio;
                 data.GrowthTimer = GrowthTimer;
                 data.HarvestCount = HarvestCount;
+                data.RotTimer = RotTimer;
+                data.IsRotten = IsRotten;
             }
 
             public void Load(SaveData data)
@@ -87,6 +96,8 @@ namespace HappyHarvest
                 GrowthRatio = data.GrowthRatio;
                 GrowthTimer = data.GrowthTimer;
                 HarvestCount = data.HarvestCount;
+                RotTimer = data.RotTimer;
+                IsRotten = data.IsRotten;
             }
         }
 
@@ -187,14 +198,27 @@ namespace HappyHarvest
             m_CropData.TryGetValue(target, out var data);
 
             if (data == null || !Mathf.Approximately(data.GrowthRatio,1.0f)) return null;
-            
+
+            if (data.IsRotten)
+            {
+                var rottenCrop = data.GrowingCrop;
+                m_CropData.Remove(target);
+                UpdateCropVisual(target);
+                var rotEffect = m_HarvestEffectPool[rottenCrop][0];
+                rotEffect.transform.position = Grid.GetCellCenterWorld(target);
+                m_HarvestEffectPool[rottenCrop].RemoveAt(0);
+                m_HarvestEffectPool[rottenCrop].Add(rotEffect);
+                rotEffect.Play();
+                return null;
+            }
+
             var produce = data.Harvest();
 
             if (data.HarvestDone)
             {
                 m_CropData.Remove(target);
             }
-            
+
             UpdateCropVisual(target);
 
             var effect = m_HarvestEffectPool[data.GrowingCrop][0];
@@ -253,7 +277,7 @@ namespace HappyHarvest
 
                 if (m_CropData.TryGetValue(cell, out var cropData))
                 {
-                    if (groundData.WaterTimer <= 0.0f)
+                    if (groundData.WaterTimer <= 0.0f && !Mathf.Approximately(cropData.GrowthRatio, 1.0f))
                     {
                         cropData.DyingTimer += Time.deltaTime;
                         if (cropData.DyingTimer > cropData.GrowingCrop.DryDeathTimer)
@@ -275,6 +299,27 @@ namespace HappyHarvest
                             cropData.CurrentGrowthStage = growthStage;
                             UpdateCropVisual(cell);
                         }
+
+                    }
+
+                    if (Mathf.Approximately(cropData.GrowthRatio, 1.0f) && !cropData.IsRotten)
+                    {
+                        cropData.RotTimer += Time.deltaTime;
+                        if (cropData.RotTimer >= cropData.GrowingCrop.RotTime)
+                        {
+                            cropData.IsRotten = true;
+                            UpdateCropVisual(cell);
+                        }
+                    }
+
+                    if (cropData.IsRotten)
+                    {
+                        cropData.RottenDestroyTimer += Time.deltaTime;
+                        if (cropData.RottenDestroyTimer >= cropData.GrowingCrop.RottenDestroyTime)
+                        {
+                            m_CropData.Remove(cell);
+                            UpdateCropVisual(cell);
+                        }
                     }
                 }
             }
@@ -285,6 +330,10 @@ namespace HappyHarvest
             if (!m_CropData.TryGetValue(target, out var data))
             {
                 CropTilemap.SetTile(target, null);
+            }
+            else if (data.IsRotten && data.GrowingCrop.RottenTile != null)
+            {
+                CropTilemap.SetTile(target, data.GrowingCrop.RottenTile);
             }
             else
             {
