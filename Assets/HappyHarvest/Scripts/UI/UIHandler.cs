@@ -62,6 +62,18 @@ namespace HappyHarvest
         private Label m_RainLabel;
         private Label m_ThunderLabel;
 
+        // Quest
+        private const int QuestGoal = 50;
+        private int m_CarrotsSold;
+        private int m_CornSold;
+        private int m_WheatSold;
+        private Label m_CarrotCount;
+        private Label m_CornCount;
+        private Label m_WheatCount;
+        private VisualElement m_QuestDropdown;
+        private Label m_QuestArrow;
+        private bool m_QuestOpen;
+
         void Awake()
         {
             s_Instance = this;
@@ -121,6 +133,15 @@ namespace HappyHarvest
             m_SunLabel.AddManipulator(new Clickable(() => { GameManager.Instance.WeatherSystem?.ChangeWeather(WeatherSystem.WeatherType.Sun); }));
             m_RainLabel.AddManipulator(new Clickable(() => { GameManager.Instance.WeatherSystem?.ChangeWeather(WeatherSystem.WeatherType.Rain); }));
             m_ThunderLabel.AddManipulator(new Clickable(() => { GameManager.Instance.WeatherSystem?.ChangeWeather(WeatherSystem.WeatherType.Thunder); }));
+
+            // Quest UI
+            var questHeader = m_Document.rootVisualElement.Q<VisualElement>("QuestHeader");
+            m_QuestDropdown = m_Document.rootVisualElement.Q<VisualElement>("QuestDropdown");
+            m_QuestArrow    = m_Document.rootVisualElement.Q<Label>("QuestArrow");
+            m_CarrotCount   = m_Document.rootVisualElement.Q<Label>("CarrotCount");
+            m_CornCount     = m_Document.rootVisualElement.Q<Label>("CornCount");
+            m_WheatCount    = m_Document.rootVisualElement.Q<Label>("WheatCount");
+            questHeader?.AddManipulator(new Clickable(ToggleQuestDropdown));
         }
         
         
@@ -312,6 +333,53 @@ namespace HappyHarvest
                 
                 m_MarketContentScrollview.Add(clone.contentContainer);
             }
+        }
+
+        public static void OnProductSold(Product product, int count)
+        {
+            s_Instance.OnProductSold_Internal(product, count);
+        }
+
+        private void OnProductSold_Internal(Product product, int count)
+        {
+            switch (product.UniqueID)
+            {
+                case "carrot":
+                    m_CarrotsSold = Mathf.Min(m_CarrotsSold + count, QuestGoal);
+                    UpdateQuestLabel(m_CarrotCount, m_CarrotsSold);
+                    break;
+                case "corn_cob":
+                    m_CornSold = Mathf.Min(m_CornSold + count, QuestGoal);
+                    UpdateQuestLabel(m_CornCount, m_CornSold);
+                    break;
+                case "wheat_grain":
+                    m_WheatSold = Mathf.Min(m_WheatSold + count, QuestGoal);
+                    UpdateQuestLabel(m_WheatCount, m_WheatSold);
+                    break;
+            }
+
+            if (m_CarrotsSold >= QuestGoal && m_CornSold >= QuestGoal && m_WheatSold >= QuestGoal)
+                Debug.Log("[Quest] BUYOUT MISSION COMPLETE! All 50 of each crop sold.");
+        }
+
+        private void UpdateQuestLabel(Label label, int current)
+        {
+            if (label == null) return;
+            label.text = $"{current}/{QuestGoal}";
+            if (current >= QuestGoal)
+            {
+                label.RemoveFromClassList("quest-count");
+                label.AddToClassList("quest-complete");
+            }
+        }
+
+        private void ToggleQuestDropdown()
+        {
+            m_QuestOpen = !m_QuestOpen;
+            if (m_QuestDropdown != null)
+                m_QuestDropdown.style.display = m_QuestOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            if (m_QuestArrow != null)
+                m_QuestArrow.text = m_QuestOpen ? "\u25BC" : "\u25BA";
         }
 
         public static void PlayBuySellSound(Vector3 location)
