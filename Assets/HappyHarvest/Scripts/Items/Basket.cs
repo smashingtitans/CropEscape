@@ -14,10 +14,17 @@ namespace HappyHarvest
         public override bool Use(Vector3Int target)
         {
             var data = GameManager.Instance.Terrain.GetCropDataAt(target);
+
+            if (data.IsRotten)
+            {
+                GameManager.Instance.Terrain.HarvestAt(target);
+                return true;
+            }
+
             if (!GameManager.Instance.Player.CanFitInInventory(data.GrowingCrop.Produce,
                     data.GrowingCrop.ProductPerHarvest))
                 return false;
-            
+
             var product = GameManager.Instance.Terrain.HarvestAt(target);
 
             if (product != null)
@@ -26,7 +33,7 @@ namespace HappyHarvest
                 {
                     GameManager.Instance.Player.AddItem(product.Produce);
                 }
-               
+
                 return true;
             }
 
