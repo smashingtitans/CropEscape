@@ -94,7 +94,7 @@ namespace HappyHarvest
 
             m_Canvas = canvasGo.AddComponent<Canvas>();
             m_Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            m_Canvas.sortingOrder = 100; // draw on top of the world
+            m_Canvas.sortingOrder = -1; // draw behind UI Toolkit panels
             canvasGo.AddComponent<GraphicRaycaster>();
 
             m_ShopIndicator = CreateIndicator("ShopIndicator", ShopSprites);
