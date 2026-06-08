@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Template2DCommon;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 
@@ -142,6 +143,10 @@ namespace HappyHarvest
             m_CornCount     = m_Document.rootVisualElement.Q<Label>("CornCount");
             m_WheatCount    = m_Document.rootVisualElement.Q<Label>("WheatCount");
             questHeader?.AddManipulator(new Clickable(ToggleQuestDropdown));
+
+            // dropdown is open by default — sync C# state and arrow to match
+            m_QuestOpen = true;
+            if (m_QuestArrow != null) m_QuestArrow.text = "\u25BC";
         }
         
         
@@ -359,7 +364,10 @@ namespace HappyHarvest
             }
 
             if (m_CarrotsSold >= QuestGoal && m_CornSold >= QuestGoal && m_WheatSold >= QuestGoal)
-                Debug.Log("[Quest] BUYOUT MISSION COMPLETE! All 50 of each crop sold.");
+            {
+                Debug.Log("Congratulations! You managed to sell enough crops, you can now move to the city.");
+                FadeToBlack(() => SceneManager.LoadScene("WinScene"));
+            }
         }
 
         private void UpdateQuestLabel(Label label, int current)
