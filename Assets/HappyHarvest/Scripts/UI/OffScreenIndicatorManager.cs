@@ -59,6 +59,14 @@ namespace HappyHarvest
         public float FlashDuration = 1.2f;
         public float FlashesPerSecond = 4.0f;
 
+        [Header("Danger state (crop close to rotting)")]
+        [Tooltip("Seconds remaining before rot triggers the danger state.")]
+        public float DangerThreshold = 10.0f;
+        [Tooltip("Arrow color when the oldest crop is about to rot.")]
+        public Color DangerColor = Color.red;
+        [Tooltip("Blinks per second during danger state.")]
+        public float DangerBlinkSpeed = 6.0f;
+
         [Tooltip("How often (seconds) to rescan the scene for harvest targets.")]
         public float TargetScanInterval = 0.5f;
 
@@ -137,13 +145,15 @@ namespace HappyHarvest
             Vector3 playerPos = player.transform.position;
 
             // Shop arrow.
-            UpdateIndicator(m_ShopIndicator, m_ShopTarget, playerPos, cam);
+            UpdateIndicator(m_ShopIndicator, m_ShopTarget, playerPos, cam, false);
 
             // Harvest arrow -> oldest fully grown crop.
-            UpdateIndicator(m_HarvestIndicator, GetOldestHarvestTarget(), playerPos, cam);
+            var oldestCrop = GetOldestHarvestTarget();
+            bool danger = IsInDangerState(oldestCrop);
+            UpdateIndicator(m_HarvestIndicator, oldestCrop, playerPos, cam, danger);
         }
 
-        private void UpdateIndicator(Indicator indicator, GameObject target, Vector3 playerPos, Camera cam)
+        private void UpdateIndicator(Indicator indicator, GameObject target, Vector3 playerPos, Camera cam, bool danger)
         {
             // No target, or the target is visible on screen -> hide the arrow.
             if (target == null || IsOnScreen(target.transform.position, cam))
@@ -157,7 +167,7 @@ namespace HappyHarvest
             if (!indicator.Rect.gameObject.activeSelf)
                 indicator.Rect.gameObject.SetActive(true);
 
-            // First time appearing -> start the flash.
+            // First time appearing -> start the appear flash.
             if (!indicator.WasActive)
             {
                 indicator.FlashEndTime = Time.time + FlashDuration;
@@ -167,21 +177,50 @@ namespace HappyHarvest
             // Place on screen edge + pick the directional sprite.
             PlaceOnEdge(indicator, target.transform.position, cam);
 
+            // Base color: red in danger state, white normally.
+            Color baseColor = danger ? DangerColor : Color.white;
+
             // Opacity from distance (far = solid, close = faint).
             float dist = Vector3.Distance(playerPos, target.transform.position);
             float t = Mathf.InverseLerp(MinOpacityDistance, MaxOpacityDistance, dist);
             float alpha = Mathf.Lerp(MinOpacity, MaxOpacity, t);
 
-            // Apply the flash on top (blink while it lasts).
-            if (Time.time < indicator.FlashEndTime)
+            // Danger blink overrides the appear flash and loops forever.
+            if (danger)
             {
+                float blink = (Mathf.Sin(Time.time * DangerBlinkSpeed * Mathf.PI * 2.0f) + 1.0f) * 0.5f;
+                alpha *= blink;
+            }
+            else if (Time.time < indicator.FlashEndTime)
+            {
+                // Appear flash (only when not in danger).
                 float blink = (Mathf.Sin(Time.time * FlashesPerSecond * Mathf.PI * 2.0f) + 1.0f) * 0.5f;
                 alpha *= blink;
             }
 
-            var c = indicator.Image.color;
-            c.a = alpha;
-            indicator.Image.color = c;
+            indicator.Image.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+        }
+
+        /// <summary>
+        /// Returns true if the given crop GameObject has 10 or fewer seconds before it goes rotten.
+        /// </summary>
+        private bool IsInDangerState(GameObject cropGo)
+        {
+            if (cropGo == null) return false;
+
+            var terrain = GameManager.Instance?.Terrain;
+            if (terrain == null || terrain.CropTilemap == null) return false;
+
+            Vector3Int cell = terrain.CropTilemap.WorldToCell(cropGo.transform.position);
+            var cropData = terrain.GetCropDataAt(cell);
+            if (cropData == null || cropData.GrowingCrop == null) return false;
+
+            // Only applies while the crop is harvestable but not yet rotten.
+            if (cropData.IsRotten) return false;
+            if (!Mathf.Approximately(cropData.GrowthRatio, 1.0f)) return false;
+
+            float timeLeft = cropData.GrowingCrop.RotTime - cropData.RotTimer;
+            return timeLeft <= DangerThreshold;
         }
 
         private bool IsOnScreen(Vector3 worldPos, Camera cam)
