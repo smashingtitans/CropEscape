@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6393031248553476982}
   - component: {fileID: 6393031248553476976}
   - component: {fileID: 142037360570545346}
+  - component: {fileID: 8064366372562502737}
   m_Layer: 0
   m_Name: wheat_02
   m_TagString: Untagged
@@ -104,6 +105,23 @@ MonoBehaviour:
   m_labelHash: 0.0000000027098297
   m_SpriteKey: 0
   m_SpriteHash: 411567199
+--- !u!114 &8064366372562502737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393031248553476981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cc410877262407ab0c851980846f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glowColor: {r: 3.6273832, g: 1.4053737, b: 0, a: 0.3882353}
+  glowStrength: 0.6
+  glowEnabled: 1
+  blinkEnabled: 1
+  blinkSpeed: 6.05
 --- !u!1 &6393031248781673410
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +182,7 @@ GameObject:
   - component: {fileID: 6393031249581742747}
   - component: {fileID: 6393031249581742725}
   - component: {fileID: 41044916706355138}
+  - component: {fileID: 5931655763025779424}
   m_Layer: 0
   m_Name: wheat_01
   m_TagString: Untagged
@@ -257,6 +276,23 @@ MonoBehaviour:
   m_labelHash: 0.0000000027098297
   m_SpriteKey: 0
   m_SpriteHash: 411567199
+--- !u!114 &5931655763025779424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393031249581742746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cc410877262407ab0c851980846f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glowColor: {r: 3.6273832, g: 1.4053737, b: 0, a: 0.3882353}
+  glowStrength: 0.6
+  glowEnabled: 1
+  blinkEnabled: 1
+  blinkSpeed: 6.05
 --- !u!1 &6393031250089754691
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +304,7 @@ GameObject:
   - component: {fileID: 6393031250089754700}
   - component: {fileID: 6393031250089754702}
   - component: {fileID: 397823859674832285}
+  - component: {fileID: 9133970609644024014}
   m_Layer: 0
   m_Name: wheat_03
   m_TagString: Untagged
@@ -361,3 +398,20 @@ MonoBehaviour:
   m_labelHash: 0.0000000027098297
   m_SpriteKey: 0
   m_SpriteHash: 411567199
+--- !u!114 &9133970609644024014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393031250089754691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cc410877262407ab0c851980846f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glowColor: {r: 3.6273832, g: 1.4053737, b: 0, a: 0.3882353}
+  glowStrength: 0.6
+  glowEnabled: 1
+  blinkEnabled: 1
+  blinkSpeed: 6.05
