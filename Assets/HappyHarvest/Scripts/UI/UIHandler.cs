@@ -65,6 +65,7 @@ namespace HappyHarvest
 
         // Quest
         private const int QuestGoal = 50;
+        private const int CarrotGoal = 25;
         private int m_CarrotsSold;
         private int m_CornSold;
         private int m_WheatSold;
@@ -350,31 +351,31 @@ namespace HappyHarvest
             switch (product.UniqueID)
             {
                 case "carrot":
-                    m_CarrotsSold = Mathf.Min(m_CarrotsSold + count, QuestGoal);
-                    UpdateQuestLabel(m_CarrotCount, m_CarrotsSold);
+                    m_CarrotsSold = Mathf.Min(m_CarrotsSold + count, CarrotGoal);
+                    UpdateQuestLabel(m_CarrotCount, m_CarrotsSold, CarrotGoal);
                     break;
                 case "corn_cob":
                     m_CornSold = Mathf.Min(m_CornSold + count, QuestGoal);
-                    UpdateQuestLabel(m_CornCount, m_CornSold);
+                    UpdateQuestLabel(m_CornCount, m_CornSold, QuestGoal);
                     break;
                 case "wheat_grain":
                     m_WheatSold = Mathf.Min(m_WheatSold + count, QuestGoal);
-                    UpdateQuestLabel(m_WheatCount, m_WheatSold);
+                    UpdateQuestLabel(m_WheatCount, m_WheatSold, QuestGoal);
                     break;
             }
 
-            if (m_CarrotsSold >= QuestGoal && m_CornSold >= QuestGoal && m_WheatSold >= QuestGoal)
+            if (m_CarrotsSold >= CarrotGoal && m_CornSold >= QuestGoal && m_WheatSold >= QuestGoal)
             {
                 Debug.Log("Congratulations! You managed to sell enough crops, you can now move to the city.");
                 FadeToBlack(() => SceneManager.LoadScene("WinScene"));
             }
         }
 
-        private void UpdateQuestLabel(Label label, int current)
+        private void UpdateQuestLabel(Label label, int current, int goal)
         {
             if (label == null) return;
-            label.text = $"{current}/{QuestGoal}";
-            if (current >= QuestGoal)
+            label.text = $"{current}/{goal}";
+            if (current >= goal)
             {
                 label.RemoveFromClassList("quest-count");
                 label.AddToClassList("quest-complete");
